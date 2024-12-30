@@ -9,14 +9,12 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up()
+    public function up(): void
     {
-        Schema::create('vehicles', function (Blueprint $table) {
+        Schema::create('regions', function (Blueprint $table) {
             $table->id();
-            $table->enum('type', ['passenger', 'cargo']);
-            $table->string('registration_number')->unique();
-            $table->float('fuel_consumption');
-            $table->date('service_schedule');
+            $table->string('name');
+            $table->enum('type', ['head_office', 'branch']);
             $table->timestamps();
         });
     }
@@ -26,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('vehicle');
+        Schema::dropIfExists('regions');
     }
 };
