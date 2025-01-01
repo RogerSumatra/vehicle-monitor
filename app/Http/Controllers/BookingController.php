@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Approval;
 use App\Models\Booking;
 use App\Models\Region;
 use App\Models\User;
@@ -69,6 +70,12 @@ class BookingController extends Controller
     $vehicle = Vehicle::find($booking->vehicle_id);
     if ($vehicle) {
         $vehicle->update(['status' => 'idle']);
+    }
+
+    // Hapus approval yang terkait
+    $approvals = Approval::find($id);
+    if ($approvals) {
+        $approvals->delete();
     }
 
     // Hapus booking

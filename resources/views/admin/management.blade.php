@@ -15,10 +15,10 @@
                 </div>
             @endif
 
-            <!-- Data Booking -->
+            <!-- Data Persetujuan -->
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg mb-6">
                 <div class="p-6">
-                    <h5 class="font-semibold text-gray-700 dark:text-gray-200 mb-4">Daftar Pihak Persetujuan</h5>
+                    <h5 class="font-semibold text-gray-700 dark:text-gray-200 mb-4">Daftar Proses Persetujuan</h5>
                     <table class="table-auto w-full text-left text-gray-700 dark:text-gray-200">
                         <thead class="border-b border-gray-300 dark:border-gray-700">
                             <tr>
@@ -48,6 +48,24 @@
                                 </tr>
                             @endforelse
                         </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Data Kendaraan yang digunakan -->
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg mb-6">
+                <div class="p-6">
+                    <h5 class="font-semibold text-gray-700 dark:text-gray-200 mb-4">Kendaraan Yang Sedang Digunakan</h5>
+                    <table class="table-auto w-full text-left text-gray-700 dark:text-gray-200">
+                        <thead class="border-b border-gray-300 dark:border-gray-700">
+                            <tr>
+                                <th class="border px-4 py-2">No</th>
+                                <th class="border px-4 py-2">Kendaraan</th>
+                                <th class="border px-4 py-2">Nama Pengemudi</th>
+                                <th class="border px-4 py-2">Tanggal Berangkat</th>
+                                <th class="border px-4 py-2">Opsi</th>
+                            </tr>
+                        </thead>
                     </table>
                 </div>
             </div>

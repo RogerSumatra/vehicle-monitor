@@ -65,19 +65,19 @@
                     <table class="table-auto w-full text-left text-gray-700 dark:text-gray-200">
                         <thead class="border-b border-gray-300 dark:border-gray-700">
                             <tr>
-                                <th class="px-4 py-2">Nomor Registrasi</th>
-                                <th class="px-4 py-2">Tanggal Terakhir Servis</th>
-                                <th class="px-4 py-2">Jadwal Servis Berikutnya</th>
-                                <th class="px-4 py-2">Status</th>
+                                <th class="border px-4 py-2">Nomor Registrasi</th>
+                                <th class="border px-4 py-2">Tanggal Terakhir Servis</th>
+                                <th class="border px-4 py-2">Jadwal Servis Berikutnya</th>
+                                <th class="border px-4 py-2">Status</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($serviceSchedules as $schedule)
                                 <tr>
-                                    <td>{{ $schedule['registration_number'] }}</td>
-                                    <td>{{ $schedule['last_service_date'] }}</td>
-                                    <td>{{ $schedule['next_service_date'] }}</td>
-                                    <td>{{ $schedule['status'] }}</td>
+                                    <td class="border px-4 py-2"> {{ $schedule['registration_number'] }}</td>
+                                    <td class="border px-4 py-2">{{ $schedule['last_service_date'] }}</td>
+                                    <td class="border px-4 py-2">{{ $schedule['next_service_date'] }}</td>
+                                    <td class="border px-4 py-2">{{ $schedule['status'] }}</td>
                                 </tr>
                             @endforeach
                         </tbody>

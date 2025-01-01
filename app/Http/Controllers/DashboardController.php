@@ -28,7 +28,7 @@ class DashboardController extends Controller
     
             return [
                 'registration_number' => $vehicle->registration_number,
-                'last_service_date' => $vehicle->last_service_date,
+                'last_service_date' => $vehicle->last_service_date->format('Y-m-d'),
                 'next_service_date' => $nextServiceDate->format('Y-m-d'),
                 'status' => $status,
             ];
