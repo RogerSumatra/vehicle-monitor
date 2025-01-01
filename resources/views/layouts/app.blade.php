@@ -28,10 +28,17 @@
                 </header>
             @endisset
 
+            @if (session('error'))
+                <div class="bg-red-100 text-red-700 p-4 rounded mb-4">
+                    {{ session('error') }}
+                </div>
+            @endif
+
             <!-- Page Content -->
             <main>
                 {{ $slot }}
             </main>
+            
         </div>
     </body>
 </html>

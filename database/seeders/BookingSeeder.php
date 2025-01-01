@@ -25,6 +25,15 @@ class BookingSeeder extends Seeder
                 'updated_at' => now()->addDays(5),
             ],
             [
+                'vehicle_id' => $vehicles[0]->id,
+                'driver' => 'John Doe',
+                'start_date' => now()->addDays(5),
+                'end_date' => now()->addDays(13),
+                'status' => 'rejected',
+                'created_at' => now()->addDays(5),
+                'updated_at' => now()->addDays(5),
+            ],
+            [
                 'vehicle_id' => $vehicles[2]->id,
                 'driver' => 'Billy Man',
                 'start_date' => now()->addDays(3),

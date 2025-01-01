@@ -11,79 +11,48 @@ class BookingController extends Controller
 {
     public function index()
     {
-        $bookings = Booking::with(['vehicle', 'user'])->get();
-        return view('bookings.index', compact('bookings'));
-    }
+        // Mengambil semua data booking
+        $bookings = Booking::with('vehicle')->orderBy('start_date', 'desc')->get();
+        $availableVehicles = Vehicle::where('status', 'idle')->get();
 
-    public function create()
-    {
-        $vehicles = Vehicle::all();
-        $approvers = User::where('role', 'approver')->get();
-        return view('bookings.create', compact('vehicles', 'approvers'));
+        return view('bookings.index', compact('bookings', 'availableVehicles', ));
     }
 
     public function store(Request $request)
     {
+        // Validasi input
         $request->validate([
             'vehicle_id' => 'required|exists:vehicles,id',
-            'approvers' => 'required|array|min:2',
+            'driver' => 'required',
+            'start_date' => 'required|date|after_or_equal:today',
+            'end_date' => 'required|date|after:start_date',
+            
         ]);
 
-        $booking = Booking::create([
-            'user_id' => auth()->id(),
-            'vehicle_id' => $request->vehicle_id,
-            'status' => 'pending',
-        ]);
+        // Menambahkan booking baru
+        Booking::create($request->all());
 
-        foreach ($request->approvers as $index => $approverId) {
-            $booking->approvals()->create([
-                'approver_id' => $approverId,
-                'level' => $index + 1,
-                'status' => 'pending',
-            ]);
-        }
+        // Update status kendaraan
+        $vehicle = Vehicle::find($request->vehicle_id);
+        $vehicle->update(['status' => 'booked']);
 
-        return redirect()->route('bookings.index')->with('success', 'Booking created successfully!');
+        return redirect()->route('bookings.index')->with('success', 'Booking berhasil ditambahkan.');
     }
 
-    public function show(Booking $booking)
-    {
-        $booking->load(['vehicle', 'approvals.approver']);
-        return view('bookings.show', compact('booking'));
+    public function destroy($id)
+{
+    // Cari booking berdasarkan ID
+    $booking = Booking::findOrFail($id);
+
+    // Ubah status kendaraan menjadi idle
+    $vehicle = Vehicle::find($booking->vehicle_id);
+    if ($vehicle) {
+        $vehicle->update(['status' => 'idle']);
     }
 
-    public function edit(Booking $booking)
-    {
-        $vehicles = Vehicle::all();
-        $approvers = User::where('role', 'approver')->get();
-        return view('bookings.edit', compact('booking', 'vehicles', 'approvers'));
-    }
+    // Hapus booking
+    $booking->delete();
 
-    public function update(Request $request, Booking $booking)
-    {
-        $request->validate([
-            'vehicle_id' => 'required|exists:vehicles,id',
-        ]);
-
-        $booking->update([
-            'vehicle_id' => $request->vehicle_id,
-        ]);
-
-        return redirect()->route('bookings.index')->with('success', 'Booking updated successfully!');
-    }
-
-    public function destroy(Booking $booking)
-    {
-        $booking->delete();
-        return redirect()->route('bookings.index')->with('success', 'Booking deleted successfully!');
-    }
-
-    public function approve($id)
-    {
-        $booking = Booking::find($id);
-        $booking->status = 'approved';
-        $booking->save();
-
-        $booking->vehicle->update(['status' => 'booked']);
-    }
+    return redirect()->route('bookings.index')->with('success', 'Booking berhasil dihapus.');
+}
 }
