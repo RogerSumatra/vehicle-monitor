@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('regions', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->enum('type', ['head_office', 'branch']);
+            $table->enum('type', ['head_office', 'branch', 'mine']);
             $table->timestamps();
         });
     }

@@ -11,8 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('vehicles', function (Blueprint $table) {
-            $table->foreignId('region_id')->constrained('regions')->onDelete('cascade');
+        Schema::table('users', function (Blueprint $table) {
+            $table->enum('role', ['admin', 'approver']);
+            $table->foreignId('region_id')->nullable()->constrained('regions')->onDelete('cascade');
         });
     }
 
@@ -21,8 +22,10 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('vehicles', function (Blueprint $table) {
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropForeign(['region_id']);
             $table->dropColumn('region_id');
+            $table->dropColumn('role');
         });
     }
 };

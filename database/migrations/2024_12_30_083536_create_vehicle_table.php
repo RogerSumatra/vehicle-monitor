@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->enum('type', ['passenger', 'cargo']);
             $table->string('registration_number')->unique();
-            $table->float('fuel_consumption');
-            $table->date('service_schedule');
+            $table->date('last_service_date');
+            $table->enum('status', ['idle', 'booked', 'in use', 'in service'])->default('idle');
             $table->timestamps();
         });
     }
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('vehicle');
+        Schema::dropIfExists('vehicles');
     }
 };
