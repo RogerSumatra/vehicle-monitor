@@ -45,4 +45,14 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function region()
+    {
+        return $this->belongsTo(Region::class);
+    }
+
+    public function approvals()
+    {
+        return $this->hasMany(Approval::class, 'approver_id');
+    }
 }

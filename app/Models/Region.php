@@ -11,8 +11,8 @@ class Region extends Model
 
     protected $fillable = ['name'];
 
-    public function vehicles()
+    public function user()
     {
-        return $this->hasMany(Vehicle::class);
+        return $this->belongsTo(User::class);
     }
 }

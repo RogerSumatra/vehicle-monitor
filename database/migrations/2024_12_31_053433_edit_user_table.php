@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->enum('role', ['admin', 'approver']);
-            $table->foreignId('region_id')->nullable()->constrained('regions')->onDelete('cascade');
+            $table->enum('role', ['admin', 'approver'])->after('name');
+            $table->foreignId('region_id')->nullable()->constrained('regions')->onDelete('cascade')->after('role');
         });
     }
 

@@ -33,9 +33,11 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware(['auth', AdminMiddleware::class])->group(function () {
-    Route::get('/bookings', [BookingController::class, 'index'])->name('bookings.index');
-    Route::post('/bookings', [BookingController::class, 'store'])->name('bookings.store');
-    Route::delete('/bookings/{id}', [BookingController::class, 'destroy'])->name('bookings.destroy');
+    Route::get('/bookings', [BookingController::class, 'index'])->name('admin.index');
+    Route::post('/bookings', [BookingController::class, 'store'])->name('admin.store');
+    Route::delete('/bookings/{id}', [BookingController::class, 'destroy'])->name('admin.destroy');
+
+    Route::get('/listapprovals', [ApprovalController::class, 'index'])->name('admin.management');
 
 });
 

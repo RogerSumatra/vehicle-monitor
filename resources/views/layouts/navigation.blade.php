@@ -19,8 +19,15 @@
 
                 <!-- Booking Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('bookings.index')" :active="request()->routeIs('bookings.index')">
+                    <x-nav-link :href="route('admin.index')" :active="request()->routeIs('admin.index')">
                         {{ __('Booking') }}
+                    </x-nav-link>
+                </div>
+
+                <!-- Pengelolaan Kendaraan Links -->
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('admin.management')" :active="request()->routeIs('admin.management')">
+                        {{ __('Pengelolaan Kendaraan') }}
                     </x-nav-link>
                 </div>
             </div>
@@ -83,8 +90,15 @@
 
         <!-- Booking Menu -->
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('bookings.index')" :active="request()->routeIs('bookings.index')">
+            <x-responsive-nav-link :href="route('admin.index')" :active="request()->routeIs('admin.index')">
                 {{ __('Booking') }}
+            </x-responsive-nav-link>
+        </div>
+
+        <!-- Pengelolaan Kendaraan Menu -->
+        <div class="pt-2 pb-3 space-y-1">
+            <x-responsive-nav-link :href="route('admin.management')" :active="request()->routeIs('admin.management')">
+                {{ __('Pengelolaan Kendaraan') }}
             </x-responsive-nav-link>
         </div>
 

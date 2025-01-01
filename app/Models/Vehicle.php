@@ -15,11 +15,6 @@ class Vehicle extends Model
         'last_service_date' => 'datetime',
     ];
 
-    public function region()
-    {
-        return $this->belongsTo(Region::class);
-    }
-
     public function bookings()
     {
         return $this->hasMany(Booking::class);

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Booking;
+use App\Models\Region;
 use App\Models\User;
 use App\Models\Vehicle;
 use Illuminate\Http\Request;
@@ -11,32 +12,52 @@ class BookingController extends Controller
 {
     public function index()
     {
-        // Mengambil semua data booking
         $bookings = Booking::with('vehicle')->orderBy('start_date', 'desc')->get();
         $availableVehicles = Vehicle::where('status', 'idle')->get();
 
-        return view('bookings.index', compact('bookings', 'availableVehicles', ));
+        // Ambil data penyetuju
+        $approversMine = User::where('role', 'approver')
+            ->whereHas('region', fn($q) => $q->where('type', 'mine'))
+            ->get();
+        $approversBranch = User::where('role', 'approver')
+            ->whereHas('region', fn($q) => $q->where('type', 'branch'))
+            ->get();
+        $approversHeadOffice = User::where('role', 'approver')
+            ->whereHas('region', fn($q) => $q->where('type', 'head_office'))
+            ->get();
+
+        return view('admin.index', compact('bookings', 'availableVehicles', 'approversMine', 'approversBranch', 'approversHeadOffice'));
     }
 
     public function store(Request $request)
     {
-        // Validasi input
         $request->validate([
             'vehicle_id' => 'required|exists:vehicles,id',
-            'driver' => 'required',
             'start_date' => 'required|date|after_or_equal:today',
             'end_date' => 'required|date|after:start_date',
-            
+            'driver' => 'required',
+            'mine_approver_id' => 'required|exists:users,id',
+            'branch_approver_id' => 'required|exists:users,id',
+            'head_office_approver_id' => 'required|exists:users,id',
         ]);
 
-        // Menambahkan booking baru
-        Booking::create($request->all());
+        $dataBooking = $request->except(['mine_approver_id', 'branch_approver_id', 'head_office_approver_id']);
 
-        // Update status kendaraan
+        // Buat Booking Baru
+        $booking = Booking::create($dataBooking);
+
+        // Panggil ApprovalController untuk membuat data approvals
+        app(ApprovalController::class)->storeApprovals($booking->id, [
+            ['approver_id' => $request->mine_approver_id, 'level' => 1],
+            ['approver_id' => $request->branch_approver_id, 'level' => 2],
+            ['approver_id' => $request->head_office_approver_id, 'level' => 3],
+        ]);
+
+        // Update status kendaraan menjadi 'booked'
         $vehicle = Vehicle::find($request->vehicle_id);
         $vehicle->update(['status' => 'booked']);
 
-        return redirect()->route('bookings.index')->with('success', 'Booking berhasil ditambahkan.');
+        return redirect()->route('admin.index')->with('success', 'Booking berhasil ditambahkan.');
     }
 
     public function destroy($id)
@@ -53,6 +74,6 @@ class BookingController extends Controller
     // Hapus booking
     $booking->delete();
 
-    return redirect()->route('bookings.index')->with('success', 'Booking berhasil dihapus.');
+    return redirect()->route('admin.index')->with('success', 'Booking berhasil dihapus.');
 }
 }
