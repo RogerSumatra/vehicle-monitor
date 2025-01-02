@@ -43,39 +43,58 @@ Berikut adalah daftar akun default yang dapat digunakan untuk mengakses aplikasi
 ### Instalasi
 
 1. Clone repository ke lokal
-   ⋅⋅⋅ ``` git clone https://github.com/RogerSumatra/vehicle-monitor.git
-   cd vehicle_monitor ```
+   ```
+   git clone https://github.com/RogerSumatra/vehicle-monitor.git
+   cd vehicle_monitor
+   ```
 
 2. Install semua dependensi
-   ⋅⋅⋅ ``` composer install
-npm install && npm run dev ```
+   ```
+   composer install
+   npm install && npm run dev
+   ```
 
 ### Konfigurasi
 
 1. Duplikat file `.env.example` menjadi `.env`:
-   ⋅⋅⋅ ``` cp .env.example .env ```
+   ```
+   cp .env.example .env
+   ```
 
-2. Atur variabel ini `.env` sesuai dengan database anda
-   ⋅⋅⋅ ``` DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=nama_database
-DB_USERNAME=username_database
-DB_PASSWORD=password_database ```
+3. Atur variabel ini `.env` sesuai dengan database anda
+   ```
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=nama_database
+   DB_USERNAME=username_database
+   DB_PASSWORD=password_database
+   ```
 
-3. Dapatkan kunci aplikasi
-   ⋅⋅⋅ ``` php artisan key:generate ```
+4. Dapatkan kunci aplikasi
+   
+   ```
+   php artisan key:generate
+   ```
 
-4. Lakukan `migration` tabel ke database
-   ⋅⋅⋅ ``` php artisan migrate ```
+5. Lakukan `migration` tabel ke database
+   ```
+   php artisan migrate
+   ```
 
-5. Lakukan `seed` untuk mengisi data ke database
-   ⋅⋅⋅ ``` php artisan db:seed ```
+7. Lakukan `seed` untuk mengisi data ke database
+   ```
+   php artisan db:seed
+   ```
 
 ### Menjalankan Aplikasi
 
 1. Jalankan server lokal
-   ⋅⋅⋅ ``` php artisan serve ```
+   ```
+   php artisan serve
+   ```
 
-2. Akses aplikasi melalui browser di alamat:
-   ⋅⋅⋅ ``` http://127.0.0.1:8000 ```
+3. Akses aplikasi melalui browser di alamat:
+   ```
+   http://127.0.0.1:8000
+   ```
