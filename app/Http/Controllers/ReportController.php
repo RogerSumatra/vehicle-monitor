@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\BookingReportExport;
-use app\Exports\BookingExportReport;
+use App\Exports\BookingExportReport;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
