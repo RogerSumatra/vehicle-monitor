@@ -57,6 +57,30 @@
                             @endforelse
                         </tbody>
                     </table>
+
+                    <!-- Form Download Data -->
+                    <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg mb-6">
+                        <div class="p-6">
+                            <h5 class="font-semibold text-gray-700 dark:text-gray-200 mb-4">Download Data Booking</h5>
+                            <form method="GET" action="{{ route('bookings.export') }}">
+                                <div class="mb-4">
+                                    <label for="start_date" class="block text-gray-700 dark:text-gray-200">Tanggal
+                                        Mulai</label>
+                                    <input type="date" name="start_date" id="start_date"
+                                        class="form-input mt-1 block w-full" required>
+                                </div>
+                                <div class="mb-4">
+                                    <label for="end_date" class="block text-gray-700 dark:text-gray-200">Tanggal
+                                        Selesai</label>
+                                    <input type="date" name="end_date" id="end_date"
+                                        class="form-input mt-1 block w-full" required>
+                                </div>
+                                <button type="submit" class="border bg-green-500 text-white px-4 py-2 rounded">
+                                    Download Excel
+                                </button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
 

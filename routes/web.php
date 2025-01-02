@@ -1,8 +1,10 @@
 <?php
 
-use App\Http\Controllers\DashboardController;
+
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\ApprovalController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Middleware\AdminMiddleware;
@@ -12,6 +14,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/export-bookings', [ReportController::class, 'export'])->name('bookings.export');
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
@@ -28,6 +32,8 @@ Route::middleware(['auth', AdminMiddleware::class])->group(function () {
 
     Route::get('/management', [ApprovalController::class, 'approvalsInfo'])->name('admin.management');
     Route::post('/vehicles/{vehicle}/complete', [VehicleController::class, 'complete'])->name('vehicles.complete');
+
+    Route::get('/export-bookings', [ReportController::class, 'export'])->name('bookings.export');
 
 });
 
