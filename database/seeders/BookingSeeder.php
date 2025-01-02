@@ -42,6 +42,16 @@ class BookingSeeder extends Seeder
                 'created_at' => now()->addDays(3),
                 'updated_at' => now()->addDays(3),
             ],
+
+            [
+                'vehicle_id' => $vehicles[3]->id,
+                'driver' => 'Sigit Kondang',
+                'start_date' => now()->subDays(3),
+                'end_date' => now()->addDays(10),
+                'status' => 'approved',
+                'created_at' => now()->subDays(3),
+                'updated_at' => now()->subDays(3),
+            ],
         ];
 
         Booking::insert($bookings);

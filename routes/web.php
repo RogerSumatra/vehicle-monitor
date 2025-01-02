@@ -3,6 +3,7 @@
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\ApprovalController;
+use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Middleware\AdminMiddleware;
 use Illuminate\Support\Facades\Route;
@@ -37,7 +38,8 @@ Route::middleware(['auth', AdminMiddleware::class])->group(function () {
     Route::post('/bookings', [BookingController::class, 'store'])->name('admin.store');
     Route::delete('/bookings/{id}', [BookingController::class, 'destroy'])->name('admin.destroy');
 
-    Route::get('/listapprovals', [ApprovalController::class, 'index'])->name('admin.management');
+    Route::get('/management', [ApprovalController::class, 'index'])->name('admin.management');
+    Route::post('/vehicles/{vehicle}/complete', [VehicleController::class, 'complete'])->name('vehicles.complete');
 
 });
 

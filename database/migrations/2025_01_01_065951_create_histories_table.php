@@ -14,9 +14,10 @@ return new class extends Migration
         Schema::create('histories', function (Blueprint $table) {
             $table->id();
             $table->foreignId('vehicle_id')->constrained('vehicles')->onDelete('cascade');
-            $table->date('start_date');
-            $table->date('end_date');
-            $table->float('fuel_consumption');
+            $table->string('driver');
+            $table->dateTime('start_date');
+            $table->dateTime('end_date');
+            $table->decimal('fuel_consumption', 8, 2);
             $table->timestamps();
         });
     }

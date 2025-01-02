@@ -33,15 +33,15 @@
                         </thead>
                         <tbody>
                             @forelse ($approvals as $approval)
-                            <tr>
-                                <td class="border px-4 py-2">{{ $loop->iteration }}</td>
-                                <td class="border px-4 py-2">{{ $approval['kendaraan'] }}</td>
-                                <td class="border px-4 py-2">{{ $approval['nama_pengemudi'] }}</td>
-                                <td class="border px-4 py-2">{{ $approval['penyetuju_level_1'] }}</td>
-                                <td class="border px-4 py-2">{{ $approval['penyetuju_level_2'] }}</td>
-                                <td class="border px-4 py-2">{{ $approval['penyetuju_level_3'] }}</td>
-                                <td class="border px-4 py-2">{{ $approval['status_persetujuan'] }}</td>
-                            </tr>
+                                <tr>
+                                    <td class="border px-4 py-2">{{ $loop->iteration }}</td>
+                                    <td class="border px-4 py-2">{{ $approval['kendaraan'] }}</td>
+                                    <td class="border px-4 py-2">{{ $approval['nama_pengemudi'] }}</td>
+                                    <td class="border px-4 py-2">{{ $approval['penyetuju_level_1'] }}</td>
+                                    <td class="border px-4 py-2">{{ $approval['penyetuju_level_2'] }}</td>
+                                    <td class="border px-4 py-2">{{ $approval['penyetuju_level_3'] }}</td>
+                                    <td class="border px-4 py-2">{{ $approval['status_persetujuan'] }}</td>
+                                </tr>
                             @empty
                                 <tr>
                                     <td colspan="6" class="text-center py-4">Tidak ada data booking.</td>
@@ -63,12 +63,53 @@
                                 <th class="border px-4 py-2">Kendaraan</th>
                                 <th class="border px-4 py-2">Nama Pengemudi</th>
                                 <th class="border px-4 py-2">Tanggal Berangkat</th>
+                                <th class="border px-4 py-2">Jadwal Selesai</th>
                                 <th class="border px-4 py-2">Opsi</th>
                             </tr>
                         </thead>
+                        <tbody>
+                            @forelse ($vehiclesInUse as $vehicle)
+                                <tr>
+                                    <td class="border px-4 py-2">{{ $loop->iteration }}</td>
+                                    <td class="border px-4 py-2">{{ $vehicle->registration_number }}</td>
+                                    <td class="border px-4 py-2">{{ $vehicle->driver }}</td>
+                                    <td class="border px-4 py-2">{{ $vehicle->start_date }}</td>
+                                    <td class="border px-4 py-2">{{ $vehicle->end_date }}</td>
+                                    <td class="border px-4 py-2">
+                                        <button onclick="toggleFuelInput({{ $vehicle->id }})"
+                                            class="border bg-blue-500 text-white px-4 py-2 rounded">
+                                            Selesai
+                                        </button>
+                                        <form id="fuel-form-{{ $vehicle->id }}"
+                                            action="{{ route('vehicles.complete', $vehicle->id) }}" method="POST"
+                                            class="hidden mt-2">
+                                            @csrf
+                                            <label class="block text-gray-700 dark:text-gray-200 mb-2">Konsumsi BBM (liter)</label>
+                                            <input type="number" name="fuel_consumption"
+                                                class="form-input mt-1 block w-full" step="0.1" required>
+                                            <button type="submit" class="border bg-green-500 text-white px-4 py-2 rounded mt-2">
+                                                Simpan
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="5" class="text-center py-4">Tidak ada kendaraan yang sedang digunakan.</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
                     </table>
                 </div>
             </div>
         </div>
     </div>
+
+    <script>
+        function toggleFuelInput(vehicleId) {
+            const form = document.getElementById(`fuel-form-${vehicleId}`);
+            form.classList.toggle('hidden');
+        }
+    </script>
+
 </x-app-layout>

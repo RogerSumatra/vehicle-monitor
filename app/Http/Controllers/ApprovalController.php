@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Approval;
-use App\Models\Booking;
+use App\Models\Vehicle;
 use Illuminate\Http\Request;
 
 class ApprovalController extends Controller
@@ -11,21 +11,16 @@ class ApprovalController extends Controller
 
     public function index()
     {
+        // Logika untuk daftar persetujuan
         $approvals = Approval::with(['booking.vehicle', 'approver.region'])
             ->get()
             ->groupBy('booking_id')
             ->map(function ($group) {
-                // Mengambil data booking
                 $booking = $group->first()->booking;
-
-                // Memeriksa status persetujuan
                 $statuses = $group->pluck('status', 'level');
                 if ($statuses->contains('rejected')) {
-                    // Jangan tampilkan jika ada yang rejected
                     return null;
                 }
-
-                // Hitung level status persetujuan
                 $approval_level = $statuses->search('approved') !== false
                     ? $statuses->keys()->filter(fn ($level) => $statuses[$level] === 'approved')->max()
                     : 0;
@@ -40,10 +35,16 @@ class ApprovalController extends Controller
                     'status_persetujuan' => $approval_level,
                 ];
             })
-            ->filter() // Hapus entri null (booking yang memiliki "rejected")
+            ->filter()
             ->values();
 
-        return view('admin.management', compact('approvals'));
+        // Logika untuk kendaraan yang sedang digunakan
+        $vehiclesInUse = Vehicle::join('bookings', 'vehicles.id', '=', 'bookings.vehicle_id')
+            ->where('vehicles.status', 'in use')
+            ->select('vehicles.id', 'vehicles.registration_number', 'bookings.driver', 'bookings.start_date', 'bookings.end_date')
+            ->get();
+
+        return view('admin.management', compact('approvals', 'vehiclesInUse'));
     }
     public function storeApprovals($bookingId, array $approvers)
     {

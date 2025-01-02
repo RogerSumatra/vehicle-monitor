@@ -9,7 +9,7 @@ class History extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['vehicle_id', 'booking_id', 'start_date', 'end_date', 'fuel_consumption'];
+    protected $fillable = ['vehicle_id', 'driver', 'start_date', 'end_date', 'fuel_consumption'];
 
     public function vehicle()
     {
