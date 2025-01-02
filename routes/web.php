@@ -6,26 +6,14 @@ use App\Http\Controllers\ApprovalController;
 use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Middleware\AdminMiddleware;
+use App\Http\Middleware\ApproverMiddleware;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-// Booking Routes
-// Route::resource('bookings', BookingController::class)->middleware('auth');
-
-// Approval Routes
-// Route::resource('approvals', ApprovalController::class)->middleware('auth');
-
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
-// Route::get('/bookings', [BookingController::class, 'index'])->middleware(['auth', 'verified'])->name('bookings.index');
-// Route::post('/bookings', [BookingController::class, 'store'])->middleware(['auth', 'verified'])->name('bookings.store');
-
-
-// Route::get('/dashboard', function () {
-//     return view('dashboard');
-// })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -38,9 +26,14 @@ Route::middleware(['auth', AdminMiddleware::class])->group(function () {
     Route::post('/bookings', [BookingController::class, 'store'])->name('admin.store');
     Route::delete('/bookings/{id}', [BookingController::class, 'destroy'])->name('admin.destroy');
 
-    Route::get('/management', [ApprovalController::class, 'index'])->name('admin.management');
+    Route::get('/management', [ApprovalController::class, 'approvalsInfo'])->name('admin.management');
     Route::post('/vehicles/{vehicle}/complete', [VehicleController::class, 'complete'])->name('vehicles.complete');
 
+});
+
+Route::middleware(['auth', ApproverMiddleware::class])->group(function () {
+    Route::get('/approvals', [ApprovalController::class, 'approvalIndex'])->name('approver.approvals.index');
+    Route::put('/approvals/{approval}', [ApprovalController::class, 'updateApproval'])->name('approver.approvals.update');
 });
 
 require __DIR__.'/auth.php';

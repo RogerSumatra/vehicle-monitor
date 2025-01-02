@@ -49,9 +49,9 @@ class BookingController extends Controller
 
         // Panggil ApprovalController untuk membuat data approvals
         app(ApprovalController::class)->storeApprovals($booking->id, [
-            ['approver_id' => $request->mine_approver_id, 'level' => 1],
-            ['approver_id' => $request->branch_approver_id, 'level' => 2],
-            ['approver_id' => $request->head_office_approver_id, 'level' => 3],
+            ['approver_id' => $request->mine_approver_id, 'level' => 0],
+            ['approver_id' => $request->branch_approver_id, 'level' => 1],
+            ['approver_id' => $request->head_office_approver_id, 'level' => 2],
         ]);
 
         // Update status kendaraan menjadi 'booked'
@@ -61,26 +61,38 @@ class BookingController extends Controller
         return redirect()->route('admin.index')->with('success', 'Booking berhasil ditambahkan.');
     }
 
+    public function updateBookingStatus(Booking $booking)
+    {
+        // Cek apakah semua approval untuk booking ini telah selesai
+        $approvals = Approval::where('booking_id', $booking->id)->get();
+
+        if ($approvals->every(fn($approval) => $approval->status === 'approved')) {
+            $booking->update(['status' => 'approved']);
+        } elseif ($approvals->contains('status', 'rejected')) {
+            $booking->update(['status' => 'rejected']);
+        }
+    }
+
     public function destroy($id)
-{
-    // Cari booking berdasarkan ID
-    $booking = Booking::findOrFail($id);
+    {
+        // Cari booking berdasarkan ID
+        $booking = Booking::findOrFail($id);
 
-    // Ubah status kendaraan menjadi idle
-    $vehicle = Vehicle::find($booking->vehicle_id);
-    if ($vehicle) {
-        $vehicle->update(['status' => 'idle']);
+        // Ubah status kendaraan menjadi idle
+        $vehicle = Vehicle::find($booking->vehicle_id);
+        if ($vehicle) {
+            $vehicle->update(['status' => 'idle']);
+        }
+
+        // Hapus approval yang terkait
+        $approvals = Approval::find($id);
+        if ($approvals) {
+            $approvals->delete();
+        }
+
+        // Hapus booking
+        $booking->delete();
+
+        return redirect()->route('admin.index')->with('success', 'Booking berhasil dihapus.');
     }
-
-    // Hapus approval yang terkait
-    $approvals = Approval::find($id);
-    if ($approvals) {
-        $approvals->delete();
-    }
-
-    // Hapus booking
-    $booking->delete();
-
-    return redirect()->route('admin.index')->with('success', 'Booking berhasil dihapus.');
-}
 }
